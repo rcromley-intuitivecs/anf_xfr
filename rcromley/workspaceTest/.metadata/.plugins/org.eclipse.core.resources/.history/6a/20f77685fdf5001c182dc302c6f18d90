@@ -1,0 +1,13 @@
+package com.anfcorp.store;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class PosServiceStarterApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

@@ -1,0 +1,11 @@
+
+application.name=@project.artifactId@
+application.version=@project.version@
+
+spring.profiles.active=@spring.profiles.active@
+
+spring.application.name=pos-alerts-test
+server.servlet.application-display-name=pos-alerts-test
+server.servlet.contextPath=/pos-alerts-test
+
+spring.mvc.pathmatch.matching-strategy=ant_path_matcher

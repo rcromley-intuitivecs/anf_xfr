@@ -1,0 +1,23 @@
+package com.anfcorp.store.service;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PosAlertsTestService {
+
+	@Value("${application.name:parameter-service}")
+	private String appName;
+	
+	@Value("${application.version:0.0.1-SNAPSHOT}")
+	private String appVersion;
+	
+	public String getProjectVersion() {
+		return appName + " - version - " + appVersion;
+	}
+	
+	public String getProjectVersion(String employeeId, String storeId) {
+		return "SELECT ANF_DC_CNCT FROM PA_EM WHERE ID_EM = '" + employeeId + "' and ID_STR_RT = '" + storeId +"'";
+	}
+	
+}

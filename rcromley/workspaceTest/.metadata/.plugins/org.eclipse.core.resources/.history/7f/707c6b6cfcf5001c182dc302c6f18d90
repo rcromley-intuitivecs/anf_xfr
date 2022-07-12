@@ -1,0 +1,21 @@
+appName: <application-name>
+appContext: <application-name>
+ 
+probe:
+  healthEndpoint: /<application-name>/param/readVersion
+
+# if you need to talk to CO enable this  
+#enableCODBConnection: true
+
+# These will need lowered/raised based on you apps needs
+resources:
+  limits:
+    cpu: 200m
+    memory: 600Mi
+  requests:
+    cpu: 100m
+    memory: 400Mi
+
+# if your app takes a while to start up, you can add a delay for kubernetes to check the health   
+#startup:
+#  delay: 120

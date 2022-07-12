@@ -1,0 +1,18 @@
+package com.anfcorp.store.service;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PosServiceStarterService {
+
+	@Value("${application.name:parameter-service}")
+	private String appName;
+	
+	@Value("${application.version:0.0.1-SNAPSHOT}")
+	private String appVersion;
+	
+	public String getProjectVersion() {
+		return appName + " - version - " + appVersion;
+	}
+}

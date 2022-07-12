@@ -1,0 +1,4 @@
+FROM openjdk:11-jre-slim
+
+ADD  ["target/<application-name>*.war", "/<application-name>.war"]
+CMD  ["java", "-jar", "/<application-name>.war"]

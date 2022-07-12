@@ -1,0 +1,64 @@
+package com.anfcorp.store.config;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.apache.commons.lang.StringUtils;
+
+import com.zaxxer.hikari.HikariDataSource;
+
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+
+@Configuration
+// TODO: CHECK THIS, if you're writing db stuff, might need transaction manangement, might need caching, delete if not using@EnableTransactionManagement
+@EnableCaching
+public class PosAlertsTestConfiguration {
+	
+	@Autowired
+	Environment env;
+	
+	@Bean
+	public Docket productApi() {
+    	return new Docket(DocumentationType.SWAGGER_2).select()
+            .apis(RequestHandlerSelectors.basePackage("com.anfcorp.stores")).build();
+	}
+	
+	@Bean
+    public DataSource mysqlDataSource() {
+		//TODO CRC - get from yaml
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/springjdbc");
+        dataSource.setUsername("guest_user");
+        dataSource.setPassword("guest_password");
+
+        return dataSource;
+    }
+	
+	/* TODO: CHECK THIS
+	 * If you need to run sql and want to store them in a nice place use this setup
+	 * Otherwise delete this bean
+	 */
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer sqlStatements() {
+		PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
+		YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+		yaml.setResources(new ClassPathResource("service-jdbc-sql.yaml"));
+		propertySourcesPlaceholderConfigurer.setProperties(yaml.getObject());
+		return propertySourcesPlaceholderConfigurer;
+	}
+	
+}

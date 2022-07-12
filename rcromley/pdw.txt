@@ -1,0 +1,34 @@
+temp ANF password
+6301FitchP!
+
+QA Central Office DB
+jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(LOAD_BALANCE=on)(ADDRESS=(PROTOCOL=tcp)(HOST=db-ss1q)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=SS1Q)))
+posstrapp / di2$kzznu5zb
+
+Gitlab token
+Mdnipka7g1kSZLsB7s-y
+
+Local DB
+jdbc:h2:file:c:/rcromley/source/anf-pos-base/target/10681-003-working-dir/anf-pos/POSDB;LOCK_TIMEOUT=30000;WRITE_DELAY=0;AUTO_SERVER=TRUE
+POSDB / POSDB
+
+FR-1111
+ANF_PARAMETER
+LOGIN clock in/out
+
+IClockPunchService
+AlertService
+BagSearchRule
+AbstractAlertRule
+IAlertService
+anf-rules.xml
+22.6.0.0-base.sql
+
+Connecting to a QA register
+ssh lozbun@31354-reg-q002.stores.anfcorp.com  -L 5902:127.0.0.1:5900
+vnc://localhost:5902
+password asked for: pos-next
+sample user ID and password 02352772 / 369369369
+H2 database on register: sudo /opt/anf-scripts/utilities/start-h2-shell.sh
+
+debug port 1044

@@ -1,0 +1,10 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: et/10681-003-working-dir/anf-pos/POSDB;LOCK_TIMEOUT=30000;WRITE_DELAY=0;AUTO_SERVER=TRUE
+    username: POSDB
+    password: POSDB
+    driverClassName: org.h2.Driver

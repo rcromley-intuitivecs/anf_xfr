@@ -1,0 +1,73 @@
+package com.anfcorp.store.config;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.apache.commons.lang.StringUtils;
+
+import com.zaxxer.hikari.HikariDataSource;
+
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+
+@Configuration
+// TODO: CHECK THIS, if you're writing db stuff, might need transaction manangement, might need caching, delete if not using
+//@EnableTransactionManagement
+//@EnableCaching
+public class PosAlertsTestConfiguration {
+	
+	@Autowired
+	Environment env;
+	
+	@Bean
+	public Docket productApi() {
+    	return new Docket(DocumentationType.SWAGGER_2).select()
+            .apis(RequestHandlerSelectors.basePackage("com.anfcorp.stores")).build();
+	}
+	
+	/* TODO: CHECK THIS
+	 * If you need to run sql and want to store them in a nice place use this setup
+	 * Otherwise delete this bean
+	 */
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer sqlStatements() {
+		PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
+		YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+		yaml.setResources(new ClassPathResource("service-jdbc-sql.yaml"));
+		propertySourcesPlaceholderConfigurer.setProperties(yaml.getObject());
+		return propertySourcesPlaceholderConfigurer;
+	}
+    
+	
+	/* TODO: CHECK THIS
+	 * If you need CO DB access, this bean will give your autowired jdbctemplate the connection it needs
+	 * this is used in conjunction with enableCODBConnection on the override_values_yaml
+	 * delete this bean if you're not connecting to CO DB
+	 */
+    @Bean
+    @Profile("!e2etest")
+    public DataSource getDataSource() {
+    	DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create(); 
+        dataSourceBuilder.username(System.getenv("CO_USERNAME")); 
+        dataSourceBuilder.password(System.getenv("CO_PASSWORD"));
+        dataSourceBuilder.url(System.getenv("CO_DB_URL"));
+        DataSource dataSource = dataSourceBuilder.build();
+        String schema = env.getProperty("co.db.schema");
+        if(dataSource instanceof HikariDataSource) {
+        	((HikariDataSource) dataSource).setMaximumPoolSize(10);
+        	if(StringUtils.isNotEmpty(schema)) {
+        		((HikariDataSource) dataSource).setSchema(schema);
+        	}
+        }
+       return dataSource;
+    }
+}

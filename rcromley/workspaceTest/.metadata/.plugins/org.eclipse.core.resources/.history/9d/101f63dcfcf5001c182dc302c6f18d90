@@ -1,0 +1,9 @@
+
+application.name=@project.artifactId@
+application.version=@project.version@
+
+spring.profiles.active=@spring.profiles.active@
+
+spring.application.name=<application-name>
+server.servlet.application-display-name=<application-name>
+server.servlet.contextPath=/<application-name>

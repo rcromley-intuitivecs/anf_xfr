@@ -1,0 +1,44 @@
+package com.anfcorp.store.service;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PosAlertsTestService {
+	
+	@Autowired
+	DataSource datasource;
+
+	@Value("${application.name:parameter-service}")
+	private String appName;
+	
+	@Value("${application.version:0.0.1-SNAPSHOT}")
+	private String appVersion;
+	
+	public String getProjectVersion() {
+		return appName + " - version - " + appVersion;
+	}
+	
+	public String getProjectVersion(String employeeId, String storeId) throws SQLException {
+		return runSelectAndGetSingleString("SELECT ANF_DC_CNCT FROM PA_EM WHERE ID_EM = '" + employeeId + "' and ID_STR_RT = '" + storeId +"'");
+	}
+	
+	private String runSelectAndGetSingleString(String sql) throws SQLException {
+		Statement stmt = datasource.getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		if(rs.next()) {
+			return rs.getString(1);
+		} else {
+			return "";
+		}		
+	}
+	
+}
